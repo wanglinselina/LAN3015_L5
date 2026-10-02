@@ -31,20 +31,28 @@
         
         /* Role Cards Styles */
         .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        .role-card { background: #fffbeb; padding: 15px; border-radius: 6px; border: 1px solid #fde68a; margin-bottom: 15px; }
+        .role-card { background: #fffbeb; padding: 15px; border-radius: 6px; border: 1px solid #fde68a; margin-bottom: 15px; position: relative; }
         .role-card.chairman { background: #f0fdfa; border-color: #99f6e4; }
         .role-card h3 { margin: 0 0 10px 0; color: #b45309; border-bottom: 1px dashed #fcd34d; padding-bottom: 5px;}
         .role-card.chairman h3 { color: #0f766e; border-bottom-color: #5eead4; }
         .tips { font-size: 0.85em; color: #475569; margin-bottom: 10px; line-height: 1.5; }
-        textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; box-sizing: border-box; font-family: inherit; resize: vertical; min-height: 80px; }
+        textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; box-sizing: border-box; font-family: inherit; resize: vertical; min-height: 100px; }
         textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.2); }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; box-sizing: border-box; }
+        input[type="text"] { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 5px; box-sizing: border-box; }
         
+        /* Export/Import Buttons */
+        .btn-mini-export { background-color: #059669; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.85em; cursor: pointer; margin-top: 8px; font-weight: bold;}
+        .btn-mini-export:hover { background-color: #047857; }
+        
+        .leader-zone { background: #f8fafc; padding: 20px; border-radius: 8px; border: 2px dashed #94a3b8; text-align: center; margin-top: 20px; }
+        .btn-import { background-color: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-import:hover { background-color: #0369a1; }
+
         /* Final Decision */
         .decision-box { background: #fef2f2; padding: 15px; border-radius: 6px; border: 1px solid #fecaca; margin-top: 15px; }
         .decision-box input { margin-bottom: 10px; }
 
-        .btn-export { display: block; width: 90%; margin: 30px auto 0; padding: 15px; background-color: var(--secondary); color: white; border: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        .btn-export { display: block; width: 100%; margin: 15px auto 0; padding: 15px; background-color: var(--secondary); color: white; border: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: background 0.3s; }
         .btn-export:hover { background-color: #991b1b; }
     </style>
 </head>
@@ -53,11 +61,11 @@
 <div class="container">
     <div class="header">
         <h1>🏆 【北上考察】會議溝通策略與模擬會議工作檯</h1>
-        <p>自我檢測 ＆ 團隊實戰發言稿共編</p>
+        <p>自我檢測 ＆ 團隊實戰發言稿自動合併系統</p>
     </div>
 
     <div class="timer-container">
-        <span>⏳ 模擬會議準備與進行時間：<span id="time-display">30:00</span></span>
+        <span>⏳ 模擬會議準備時間：<span id="time-display">30:00</span></span>
         <button class="timer-btn" onclick="startTimer()">開始計時</button>
         <button class="timer-btn" onclick="pauseTimer()">暫停</button>
     </div>
@@ -72,8 +80,6 @@
     <!-- 第一部分：概念與句型檢測 -->
     <div class="section" id="quiz-section">
         <h2>✅ 第一部分：會議語言策略檢測 (自動對答)</h2>
-        <p style="font-size: 0.9em; color: #475569;">請根據第五課學過的「會議語言技巧(二)」與「溝通漏斗」理論，選出正確的答案。</p>
-
         <div class="question-box">
             <div class="question-text">1. 在會議中，如果你想表示「對意見有所保留 / 委婉反對」，應該使用哪一句話最得體？</div>
             <div class="options" id="q1-options">
@@ -94,85 +100,73 @@
             <div id="q2-feedback" class="feedback"></div>
         </div>
 
-        <div class="question-box">
-            <div class="question-text">3. 根據「溝通漏斗」理論，信息會在傳遞過程中不斷流失。為了掃除溝通障礙，第一步我們應該怎麼做？</div>
-            <div class="options" id="q3-options">
-                <label><input type="radio" name="q3" value="A"> A. 大聲並緩慢地把要求重複三遍</label>
-                <label><input type="radio" name="q3" value="B"> B. 強制要求與會者做詳細的會議記錄</label>
-                <label><input type="radio" name="q3" value="C"> C. 採用「換位思考」，站在對方的角度考慮需要</label>
-            </div>
-            <div id="q3-feedback" class="feedback"></div>
-        </div>
-
         <button class="btn-check" onclick="checkAnswers()">送出並檢查答案</button>
     </div>
 
     <!-- 第二部分：模擬會議劇本草擬 -->
     <div class="section">
         <h2>💬 第二部分：模擬會議實戰 (北京華美考察匯報)</h2>
-        <p style="font-size: 0.9em; color: #475569;">請各組員根據抽籤獲得的「資料卡」，運用第一部分學到的「委婉反對」、「嘗試協調」或「要求澄清」等句式，撰寫你的發言稿。</p>
+        <p style="font-size: 0.9em; color: #475569;">請組員各自填寫自己抽籤到的角色部分。寫完後，點擊「匯出我的草稿」並傳給組長。</p>
         
         <div class="role-card chairman">
-            <h3>👤 主席 - 採購部經理 徐建邦</h3>
-            <div class="tips">
-                <strong>任務：</strong>帶領討論、控制時間、調整會議氣氛，並在最後總結討論結果作出議決。
-            </div>
-            <textarea id="draft_p1" placeholder="請草擬你的開場白與引導發言 (例如：大家辛苦了，這次北京考察...)"></textarea>
+            <h3>👤 主席 - 採購部經理 <input type="text" id="name_p1" placeholder="輸入飾演者姓名" style="width:150px; display:inline-block; margin-left:10px; padding:3px;"></h3>
+            <div class="tips"><strong>任務：</strong>帶領討論、控制時間、調整會議氣氛，並在最後總結討論結果作出議決。</div>
+            <textarea id="draft_p1" placeholder="請草擬你的開場白與引導發言..."></textarea>
+            <div style="text-align: right;"><button class="btn-mini-export" onclick="exportRole('p1', '主席草稿')">💾 匯出我的草稿 (.json)</button></div>
         </div>
 
         <div class="grid-2col">
             <div class="role-card">
-                <h3>👤 與會者 A - 採購部主任 陳達志</h3>
-                <div class="tips">
-                    <strong>你的考察發現：</strong>產品設計新穎；廠房設備先進。但在「大中華電器」發現華美小家電價格較貴，煮食鍋要 ¥569~¥599。<br>
-                    <strong>任務：</strong>匯報資料，並針對價格提出委婉的疑慮。
-                </div>
+                <h3>👤 與會者 A - 陳達志 <input type="text" id="name_p2" placeholder="姓名" style="width:100px; display:inline-block; margin-left:5px; padding:3px;"></h3>
+                <div class="tips"><strong>考察發現：</strong>產品設計新穎；大中華電器的華美小家電較貴。<br><strong>任務：</strong>匯報資料，並運用委婉疑慮回應價格。</div>
                 <textarea id="draft_p2" placeholder="請草擬發言..."></textarea>
+                <div style="text-align: right;"><button class="btn-mini-export" onclick="exportRole('p2', '與會者A草稿')">💾 匯出我的草稿</button></div>
             </div>
 
             <div class="role-card">
-                <h3>👤 與會者 B - 採購部主任 張緯翎</h3>
-                <div class="tips">
-                    <strong>你的考察發現：</strong>煮食鍋/炸鍋體積小省地方，但光波爐體積大、貴且不實用。廠房有6條生產線，管理佳。<br>
-                    <strong>任務：</strong>匯報資料，並嘗試對「是否採購光波爐」提出反對或協調意見。
-                </div>
+                <h3>👤 與會者 B - 張緯翎 <input type="text" id="name_p3" placeholder="姓名" style="width:100px; display:inline-block; margin-left:5px; padding:3px;"></h3>
+                <div class="tips"><strong>考察發現：</strong>煮食鍋體積小；光波爐貴且不實用。廠房管理佳。<br><strong>任務：</strong>嘗試對「採購光波爐」提出委婉反對或協調。</div>
                 <textarea id="draft_p3" placeholder="請草擬發言..."></textarea>
+                <div style="text-align: right;"><button class="btn-mini-export" onclick="exportRole('p3', '與會者B草稿')">💾 匯出我的草稿</button></div>
             </div>
 
             <div class="role-card">
-                <h3>👤 與會者 C - 採購部主任 王芷君</h3>
-                <div class="tips">
-                    <strong>你的考察發現：</strong>空氣炸鍋銷量最好！但煮食鍋操作複雜；光波爐耗電高且定價高（¥799，比本港A品牌貴）。<br>
-                    <strong>任務：</strong>運用比較句式匯報數據，並試探性地提出建議。
-                </div>
+                <h3>👤 與會者 C - 王芷君 <input type="text" id="name_p4" placeholder="姓名" style="width:100px; display:inline-block; margin-left:5px; padding:3px;"></h3>
+                <div class="tips"><strong>考察發現：</strong>空氣炸鍋銷量最好；光波爐耗電且定價高。<br><strong>任務：</strong>運用比較句式匯報數據，試探性提出建議。</div>
                 <textarea id="draft_p4" placeholder="請草擬發言..."></textarea>
+                <div style="text-align: right;"><button class="btn-mini-export" onclick="exportRole('p4', '與會者C草稿')">💾 匯出我的草稿</button></div>
             </div>
 
             <div class="role-card">
-                <h3>👤 與會者 D - 採購部助理 謝芝婷</h3>
-                <div class="tips">
-                    <strong>你的考察發現：</strong>空氣炸鍋易清洗。去年下半年，華美的廚房電器整體銷量排第一。廠房電子化管理。<br>
-                    <strong>任務：</strong>補充有利數據，並回應其他同事的疑慮。
-                </div>
+                <h3>👤 與會者 D - 謝芝婷 <input type="text" id="name_p5" placeholder="姓名" style="width:100px; display:inline-block; margin-left:5px; padding:3px;"></h3>
+                <div class="tips"><strong>考察發現：</strong>空氣炸鍋易清洗。去年下半年華美銷量第一。<br><strong>任務：</strong>補充有利數據，回應同事疑慮。</div>
                 <textarea id="draft_p5" placeholder="請草擬發言..."></textarea>
+                <div style="text-align: right;"><button class="btn-mini-export" onclick="exportRole('p5', '與會者D草稿')">💾 匯出我的草稿</button></div>
             </div>
         </div>
 
         <div class="decision-box">
-            <h3 style="margin-top:0; color:#991b1b;">📝 會議最終議決 (由主席填寫)</h3>
+            <h3 style="margin-top:0; color:#991b1b;">📝 會議最終議決 (由主席統整後填寫)</h3>
             <label>建議採購的產品：</label>
-            <input type="text" id="final_product" placeholder="綜合大家意見，決定採購哪幾款產品？(例如：空氣炸鍋、多功能煮食鍋)">
+            <input type="text" id="final_product" placeholder="綜合大家意見，決定採購哪幾款產品？">
             <label>目標意向價格：</label>
             <input type="text" id="final_price" placeholder="針對上述產品，我方希望爭取的採購價是多少？">
         </div>
+        
+        <!-- 組長合併專區 -->
+        <div class="leader-zone">
+            <h3 style="margin-top:0; color:#0369a1;">👑 組長合併專區</h3>
+            <p style="font-size: 0.9em; color: #475569;">請組長點擊下方按鈕，一次選取組員傳給你的所有 <code>.json</code> 檔案，系統會自動填入對應格子。</p>
+            <input type="file" id="importFiles" multiple accept=".json" style="display:none;" onchange="importRoles(event)">
+            <button class="btn-import" onclick="document.getElementById('importFiles').click()">📂 批量匯入組員草稿</button>
+            <button class="btn-export" onclick="exportToWord()">📥 完成會議：匯出最終決策報告 (Word)</button>
+        </div>
     </div>
-
-    <button class="btn-export" onclick="exportToWord()">📥 完成會議：匯出完整決策報告 (Word)</button>
 </div>
 
 <script>
-    // --- 計時器邏輯 ---
-    let timeInSecs = 30 * 60; // 30 分鐘
+    // --- 計時器 ---
+    let timeInSecs = 30 * 60;
     let timerInterval;
     let isRunning = false;
 
@@ -191,7 +185,7 @@
                 if (timeInSecs <= 0) {
                     clearInterval(timerInterval);
                     isRunning = false;
-                    alert("⏳ 30分鐘會議時間結束！請主席盡快作出總結並匯出報告。");
+                    alert("⏳ 30分鐘會議時間結束！請主席盡快統整並匯出報告。");
                 }
             }, 1000);
         }
@@ -204,40 +198,84 @@
 
     // --- Quiz 邏輯 ---
     function checkAnswers() {
-        const checkQ = (qName, correctVal, successMsg, failMsg) => {
+        const checkQ = (qName, correctVal) => {
             const selected = document.querySelector(`input[name="${qName}"]:checked`);
             const feedback = document.getElementById(`${qName}-feedback`);
-            if (!selected) {
-                feedback.className = 'feedback wrong';
-                feedback.innerText = '⚠️ 請先選擇一個答案！';
-                return;
-            }
+            if (!selected) return;
             if (selected.value === correctVal) {
                 feedback.className = 'feedback correct';
-                feedback.innerText = `✅ 答對了！${successMsg}`;
+                feedback.innerText = '✅ 答對了！';
             } else {
                 feedback.className = 'feedback wrong';
-                feedback.innerText = `❌ 答錯了。${failMsg}`;
+                feedback.innerText = '❌ 答錯了，請再試試。';
             }
         };
-
-        checkQ('q1', 'B', '「大原則同意，但問題出在...」是典型的委婉反對句式，給對方留面子。', '正確答案是 B。A是直接反對（語氣較硬），C也是直接反對。');
-        checkQ('q2', 'A', '「先試試，細節再商討」表達了接納意見並嘗試協調的態度。', '正確答案是 A。B是要求澄清/申述，C是試探態度。');
-        checkQ('q3', 'C', '避免信息流失的第一步就是「換位思考」，設身處地考慮對方需要。', '正確答案是 C。專家指出溝通的第一步是採用「換位思考」。');
+        checkQ('q1', 'B');
+        checkQ('q2', 'A');
     }
 
-    // --- 匯出 Word 邏輯 ---
+    // --- 單人草稿匯出 (組員使用) ---
+    function exportRole(roleKey, roleLabel) {
+        const nameVal = document.getElementById('name_' + roleKey).value || '未填寫姓名';
+        const draftVal = document.getElementById('draft_' + roleKey).value || '';
+        
+        const data = {
+            roleKey: roleKey,
+            name: nameVal,
+            draft: draftVal
+        };
+        
+        const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${nameVal}_${roleLabel}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // --- 批量草稿匯入 (組長使用) ---
+    function importRoles(event) {
+        const files = event.target.files;
+        if (files.length === 0) return;
+        
+        let successCount = 0;
+        
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.roleKey) {
+                        document.getElementById('name_' + data.roleKey).value = data.name;
+                        document.getElementById('draft_' + data.roleKey).value = data.draft;
+                        successCount++;
+                    }
+                    if (successCount === files.length) {
+                        alert(`成功匯入 ${successCount} 份組員草稿！現在您可以填寫最終決策並匯出 Word 檔了。`);
+                    }
+                } catch (err) {
+                    console.error("檔案解析失敗:", err);
+                }
+            };
+            reader.readAsText(file);
+        });
+        
+        event.target.value = ''; // 重置 file input
+    }
+
+    // --- 匯出最終 Word 報告 ---
     function exportToWord() {
         const getVal = (id) => (document.getElementById(id).value || '尚未填寫').replace(/\n/g, '<br>');
         
         const gName = getVal('groupName');
         const gDate = getVal('meetingDate');
         
-        const dp1 = getVal('draft_p1');
-        const dp2 = getVal('draft_p2');
-        const dp3 = getVal('draft_p3');
-        const dp4 = getVal('draft_p4');
-        const dp5 = getVal('draft_p5');
+        const np1 = getVal('name_p1'); const dp1 = getVal('draft_p1');
+        const np2 = getVal('name_p2'); const dp2 = getVal('draft_p2');
+        const np3 = getVal('name_p3'); const dp3 = getVal('draft_p3');
+        const np4 = getVal('name_p4'); const dp4 = getVal('draft_p4');
+        const np5 = getVal('name_p5'); const dp5 = getVal('draft_p5');
         
         const fProd = getVal('final_product');
         const fPrice = getVal('final_price');
@@ -263,27 +301,27 @@
             <h2>💬 團隊發言紀錄</h2>
             
             <div class="box chairman">
-                <p style="color:#0f766e; margin:0 0 5px 0; font-weight:bold;">主席 (採購部經理 徐建邦)[cite: 3]：</p>
+                <p style="color:#0f766e; margin:0 0 5px 0; font-weight:bold;">主席 (徐建邦) - 飾演者：${np1}</p>
                 <p style="margin:0;">${dp1}</p>
             </div>
             
             <div class="box">
-                <p style="color:#b45309; margin:0 0 5px 0; font-weight:bold;">與會者 A (採購部主任 陳達志)[cite: 4]：</p>
+                <p style="color:#b45309; margin:0 0 5px 0; font-weight:bold;">與會者 A (陳達志) - 飾演者：${np2}</p>
                 <p style="margin:0;">${dp2}</p>
             </div>
             
             <div class="box">
-                <p style="color:#b45309; margin:0 0 5px 0; font-weight:bold;">與會者 B (採購部主任 張緯翎)[cite: 5]：</p>
+                <p style="color:#b45309; margin:0 0 5px 0; font-weight:bold;">與會者 B (張緯翎) - 飾演者：${np3}</p>
                 <p style="margin:0;">${dp3}</p>
             </div>
             
             <div class="box">
-                <p style="color:#b45309; margin:0 0 5px 0; font-weight:bold;">與會者 C (採購部主任 王芷君)[cite: 7]：</p>
+                <p style="color:#b45309; margin:0 0 5px 0; font-weight:bold;">與會者 C (王芷君) - 飾演者：${np4}</p>
                 <p style="margin:0;">${dp4}</p>
             </div>
             
             <div class="box">
-                <p style="color:#b45309; margin:0 0 5px 0; font-weight:bold;">與會者 D (採購部助理 謝芝婷)[cite: 6]：</p>
+                <p style="color:#b45309; margin:0 0 5px 0; font-weight:bold;">與會者 D (謝芝婷) - 飾演者：${np5}</p>
                 <p style="margin:0;">${dp5}</p>
             </div>
 
