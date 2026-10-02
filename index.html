@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【北上考察】會議溝通與語言策略挑戰</title>
+    <style>
+        :root { --primary: #4338ca; --secondary: #b91c1c; --bg: #f8fafc; --white: #ffffff; --text: #334155; }
+        body { font-family: 'Microsoft YaHei', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: var(--text); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; background: var(--white); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); overflow: hidden; padding-bottom: 20px; }
+        .header { background: var(--primary); color: var(--white); padding: 25px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 1.6em; letter-spacing: 1px; }
+        .header p { margin: 5px 0 0; opacity: 0.9; }
+        
+        .section { padding: 20px 25px; border-bottom: 1px solid #e2e8f0; }
+        h2 { color: var(--secondary); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; }
+        
+        .question-box { background: #e0e7ff; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #4338ca; }
+        .question-text { font-weight: bold; margin-bottom: 10px; color: #1e1b4b; }
+        .options label { display: block; margin-bottom: 8px; cursor: pointer; padding: 8px; background: white; border-radius: 4px; border: 1px solid #c7d2fe; transition: 0.2s; }
+        .options label:hover { background: #c7d2fe; }
+        
+        .feedback { display: none; margin-top: 10px; padding: 10px; border-radius: 4px; font-weight: bold; }
+        .feedback.correct { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; display: block; }
+        .feedback.wrong { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; display: block; }
+
+        .scenario-box { background: #fffbeb; padding: 15px; border-radius: 6px; border: 1px solid #fde68a; margin-bottom: 15px; }
+        textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; box-sizing: border-box; font-family: inherit; resize: vertical; min-height: 100px; margin-top: 10px;}
+        textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(67, 56, 202, 0.2); }
+
+        .btn-check { background-color: #4338ca; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-check:hover { background-color: #3730a3; }
+        
+        .btn-export { display: block; width: 90%; margin: 30px auto 0; padding: 15px; background-color: var(--secondary); color: white; border: none; border-radius: 5px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: background 0.3s; }
+        .btn-export:hover { background-color: #991b1b; }
+        
+        .student-info { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 5px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🏆 【北上考察】會議溝通與語言策略挑戰</h1>
+        <p>自我檢測 ＆ 實戰發言稿草擬</p>
+    </div>
+    
+    <div class="section">
+        <div class="student-info">
+            <div><label>學生姓名 / 組別：</label><input type="text" id="studentName" placeholder="輸入姓名或組別..."></div>
+            <div><label>學號：</label><input type="text" id="studentId" placeholder="輸入學號..."></div>
+        </div>
+    </div>
+
+    <!-- 第一部分：概念與句型檢測 -->
+    <div class="section" id="quiz-section">
+        <h2>✅ 第一部分：會議語言策略檢測 (自動對答)</h2>
+        <p style="font-size: 0.9em; color: #475569;">請根據第五課學過的「會議語言技巧(二)」與「溝通漏斗」理論，選出正確的答案。</p>
+
+        <!-- Q1 -->
+        <div class="question-box">
+            <div class="question-text">1. 在會議中，如果你想表示「對意見有所保留 / 委婉反對」，應該使用哪一句話最得體？</div>
+            <div class="options" id="q1-options">
+                <label><input type="radio" name="q1" value="A"> A. 「對不起，我不能接受你的看法。」</label>
+                <label><input type="radio" name="q1" value="B"> B. 「大原則我是同意的，但問題出在……」</label>
+                <label><input type="radio" name="q1" value="C"> C. 「我認為不應該這樣做。」</label>
+            </div>
+            <div id="q1-feedback" class="feedback"></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-box">
+            <div class="question-text">2. 面對不同的意見時，如果你想「嘗試協調」，以下哪一句話最合適？</div>
+            <div class="options" id="q2-options">
+                <label><input type="radio" name="q2" value="A"> A. 「我們可不可以先試試？細節可以再商討。」</label>
+                <label><input type="radio" name="q2" value="B"> B. 「大家可能誤會了小張的意思。」</label>
+                <label><input type="radio" name="q2" value="C"> C. 「如果我們不跟華美合作，還有沒有更好的選擇？」</label>
+            </div>
+            <div id="q2-feedback" class="feedback"></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-box">
+            <div class="question-text">3. 根據「溝通漏斗」理論，信息會在傳遞過程中不斷流失。為了掃除溝通障礙，第一步我們應該怎麼做？</div>
+            <div class="options" id="q3-options">
+                <label><input type="radio" name="q3" value="A"> A. 大聲並緩慢地把要求重複三遍</label>
+                <label><input type="radio" name="q3" value="B"> B. 強制要求與會者做詳細的會議記錄</label>
+                <label><input type="radio" name="q3" value="C"> C. 採用「換位思考」，站在對方的角度考慮需要</label>
+            </div>
+            <div id="q3-feedback" class="feedback"></div>
+        </div>
+
+        <button class="btn-check" onclick="checkAnswers()">送出並檢查答案</button>
+    </div>
+
+    <!-- 第二部分：實戰草擬 -->
+    <div class="section">
+        <h2>💬 第二部分：實戰發言稿草擬 (匯出給老師)</h2>
+        
+        <div class="scenario-box">
+            <strong>📍 考察情境題：</strong><br>
+            你們正在北京與華美進行交流會議。華美代表提出：「我們的 8合1多功能煮食鍋，批發 200-500 個的價格是 ¥399。」<br>
+            你們經過昨天的零售點考察，知道「華美小家電的價格比較貴」。
+        </div>
+
+        <label style="font-weight: bold; color: #1e1b4b;">任務 A：委婉反對與協調</label>
+        <p style="font-size:0.9em; color:#475569; margin-top:5px;">請運用「委婉反對」或「嘗試協調」的句型（如：<i>你的建議很好，不過... / 我認為還是值得投資的，不過...</i>），回應華美的報價，並表達希望能有更優惠的價格。</p>
+        <textarea id="draft1" placeholder="請在此輸入你的發言稿..."></textarea>
+
+        <label style="font-weight: bold; color: #1e1b4b; margin-top:20px; display:block;">任務 B：要求澄清與試探</label>
+        <p style="font-size:0.9em; color:#475569; margin-top:5px;">華美的代表解釋了一堆關於運輸成本增加的理由，你聽得不太明白。請運用「要求澄清」及「試探態度」的句式（如：<i>能否再解釋一遍... / 假如我們增加採購量至500個，是不是可以...</i>）進行回應。</p>
+        <textarea id="draft2" placeholder="請在此輸入你的發言稿..."></textarea>
+    </div>
+
+    <button class="btn-export" onclick="exportToWord()">📥 完成練習：匯出為 Word 作業檔</button>
+</div>
+
+<script>
+    function checkAnswers() {
+        const checkQ = (qName, correctVal, successMsg, failMsg) => {
+            const selected = document.querySelector(`input[name="${qName}"]:checked`);
+            const feedback = document.getElementById(`${qName}-feedback`);
+            if (!selected) {
+                feedback.className = 'feedback wrong';
+                feedback.innerText = '⚠️ 請先選擇一個答案！';
+                return 0;
+            }
+            if (selected.value === correctVal) {
+                feedback.className = 'feedback correct';
+                feedback.innerText = `✅ 答對了！${successMsg}`;
+                return 1;
+            } else {
+                feedback.className = 'feedback wrong';
+                feedback.innerText = `❌ 答錯了。${failMsg}`;
+                return 0;
+            }
+        };
+
+        let score = 0;
+        // Q1: B (委婉反對)
+        score += checkQ('q1', 'B', '「大原則同意，但問題出在...」是典型的委婉反對句式，給對方留面子。', '正確答案是 B。A是直接反對（語氣較硬），C也是直接反對。');
+        // Q2: A (嘗試協調)
+        score += checkQ('q2', 'A', '「先試試，細節再商討」表達了接納意見並嘗試協調的態度。', '正確答案是 A。B是要求澄清/申述，C是試探態度。');
+        // Q3: C (換位思考)
+        score += checkQ('q3', 'C', '避免信息流失的第一步就是「換位思考」，設身處地考慮對方需要。', '正確答案是 C。專家指出溝通的第一步是採用「換位思考」。');
+    }
+
+    function exportToWord() {
+        const getVal = (id) => (document.getElementById(id).value || '尚未填寫').replace(/\n/g, '<br>');
+        
+        const sName = getVal('studentName');
+        const sId = getVal('studentId');
+        const draft1 = getVal('draft1');
+        const draft2 = getVal('draft2');
+
+        let htmlContent = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+        <meta charset='utf-8'>
+        <title>會議溝通策略作業</title>
+        <style>
+            body { font-family: 'Microsoft YaHei', sans-serif; line-height: 1.6; }
+            h1 { color: #4338ca; text-align: center; border-bottom: 2px solid #4338ca; padding-bottom: 10px; }
+            h2 { color: #b91c1c; margin-top: 20px; background-color: #f8fafc; padding: 5px; border-left: 5px solid #b91c1c;}
+            .box { border: 1px solid #cbd5e1; padding: 15px; margin-bottom: 15px; background-color: #e0e7ff; }
+        </style>
+        </head>
+        <body>
+            <h1>【北上考察】會議語言策略實戰作業</h1>
+            <p><strong>學生姓名/組別：</strong> ${sName} &nbsp;&nbsp;&nbsp; <strong>學號：</strong> ${sId}</p>
+            
+            <h2>任務 A：委婉反對與協調 (回應價格問題)</h2>
+            <div class="box">
+                <p>${draft1}</p>
+            </div>
+            
+            <h2>任務 B：要求澄清與試探態度 (回應運輸成本)</h2>
+            <div class="box">
+                <p>${draft2}</p>
+            </div>
+            <br>
+            <p style="color:gray; font-size:12px;">註：學生已於網頁端完成第一部分之觀念檢測。</p>
+        </body>
+        </html>
+        `;
+
+        const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${sName}_會議策略作業.doc`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
+
+</body>
+</html>
